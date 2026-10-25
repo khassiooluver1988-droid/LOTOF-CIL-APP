@@ -1,0 +1,47 @@
+name: Gerar APK SuperFácil Android
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'android/**'
+      - '.github/workflows/android-apk.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter código
+        uses: actions/checkout@v4
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Instalar componentes do Android SDK
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Preparar Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Compilar APK de testes
+        run: gradle -p android :app:assembleDebug --no-daemon --stacktrace
+      - name: Verificar arquivo gerado
+        run: test -s android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Guardar APK como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: SuperFacil-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+      - name: Publicar APK em release de testes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=superfacil-android-beta
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "SuperFácil Android — teste" --notes "APK de testes do SuperFácil. Requer internet. Instalação manual no Android; não é versão definitiva para Play Store." --prerelease
+          gh release upload "$TAG" "android/app/build/outputs/apk/debug/app-debug.apk#SuperFacil-Android.apk" --clobber
