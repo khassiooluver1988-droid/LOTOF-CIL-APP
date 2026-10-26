@@ -1,38 +1,49 @@
 # SuperFácil — LOTOF-CIL-APP
 
-Aplicativo de análise **descritiva** da Lotofácil (independente da CAIXA). Projeto versionado em `khassiooluver1988-droid/LOTOF-CIL-APP`.
+Aplicativo **independente** de análise descritiva dos resultados da Lotofácil. Não realiza apostas, não é serviço oficial da CAIXA e não promete maior probabilidade de acerto.
 
-## Funcionalidades
-- Seleção de **exatamente cinco dezenas a excluir** entre 01 e 25.
-- Jogos de 15 dezenas usando apenas as 20 restantes, sem repetições de jogos; até **15.504** combinações distintas.
-- Análise de frequências, pares/ímpares, repetidas e padrões combinados **somente com resultados reais**.
-- Janela móvel dos **599 concursos válidos mais recentes** (meta), sem incluir concursos ainda não realizados.
-- Conta por e-mail, jogos salvos, exportação CSV, navegação adaptada ao celular e recomendações de jogo responsável.
+## Interface aprovada
+- Cabeçalho superior roxo com logotipo SuperFácil, trevo e links para **Início**, **Jogar**, **Análise** e **Análise de resultados**.
+- Botão **Menu** no canto superior para acessar as demais páginas.
+- Página inicial responsiva com banner, indicador do último concurso carregado, cartões para gerar jogos/analisar/conferir/salvar e dezenas do último concurso da base.
+- Rodapé institucional: **Desenvolvido por Khassio Silva**; **Gerenciado por Insight Marketing e Desenvolvimento**.
+- Suporte pelo [WhatsApp (86) 99446-5882](https://wa.me/5586994465882).
+- Segurança: informação sobre conexão HTTPS e link externo ao Google Safe Browsing. A marca do Google não indica parceria, certificação ou auditoria de segurança.
 
-## Estado da base
-O banco PostgreSQL/Supabase do projeto de desenvolvimento está provisionado com as tabelas `concursos`, `importacoes` e `jogos`, protegidas por RLS. Ainda é necessário **importar os resultados**. A planilha mestre `Base20_Resultados_Lotofacil.xlsx` contém 100 resultados de referência; não declarar cobertura de 599 até validar todos os registros. O aplicativo sinaliza a ausência de base em vez de fabricar estatísticas.
+## Estratégia e regras
+1. O usuário exclui **exatamente 5 dezenas** entre 01 e 25.
+2. O gerador utiliza apenas as **20 dezenas restantes**, com 15 dezenas distintas por jogo.
+3. Há **15.504 combinações matematicamente possíveis** a partir dessas 20 dezenas.
+4. Análises contemplam pares/ímpares, repetidas, frequências e padrões históricos, calculados com concursos registrados.
+5. Resultados não têm poder preditivo demonstrado: em sorteios justos, cada aposta simples possui a mesma chance de acertar 15 dezenas (**1 em 3.268.760**).
+6. Jogos salvos podem ser comparados com concursos registrados pela tela **Análise de resultados**. Conferência de jogos não comprova aposta efetivamente realizada ou pagamento de prêmio.
 
-## Desenvolvimento local
-Requer Node.js 22+ e Bun opcional:
+## Histórico e Supabase
+- Planilha principal: `Base20_Resultados_Lotofacil.xlsx`.
+- Em uma importação previamente confirmada no ambiente de desenvolvimento, **600 registros consecutivos** foram gravados no banco do Supabase, entre os concursos **3213 e 3812**.
+- A janela de análise usa **os 599 concursos mais recentes disponíveis**; o registro 3213 estava reservado como anterior de comparação. Esse é o **último estado confirmado da carga histórica**, não a alegação de que a base permanece atualizada até o concurso de hoje.
+- A consulta do aplicativo ordena os registros por número de concurso decrescente, limitados a 599. A rotina de busca e importação automática de novos resultados oficiais **ainda precisa ser implementada e validada**. Não registrar resultados futuros ou fictícios.
+- O Supabase vinculado ao desenvolvimento Lovable e um clone implantado a partir do GitHub podem exigir configuração de ambiente e permissões próprias. O GitHub não sincroniza automaticamente a implantação do Lovable.
+- A chave privada do Supabase e outros segredos **não devem ser incluídos no repositório**.
+
+## Desenvolvimento
+Stack: TypeScript, React, TanStack Start, Tailwind e Supabase. Para instalar e executar localmente:
 
 ```bash
-npm install
+bun install --frozen-lockfile
 cp .env.example .env
-npm run dev
-npm run test
-npm run build
+bun run dev
 ```
 
-Preencha a URL do Supabase e a **chave pública** no `.env`. Nunca faça commit de arquivos com chaves privadas, segredos ou `service_role`. Para hospedar fora do Lovable, verifique a compatibilidade do runtime TanStack Start SSR.
+Configurar no `.env` apenas as variáveis públicas exigidas pelo projeto; segredos devem permanecer exclusivamente no ambiente de execução. O fluxo `.github/workflows/verificar-web.yml` confere os testes, o build e os tipos.
 
-## Arquitetura
-React 19 / TypeScript / TanStack Start / Tailwind / Supabase. No repositório: `src/routes` (telas), `src/lib/lotofacil.ts` (motor matemático), `src/lib/data.ts` (consulta de concursos), `src/lib/jogos-store.ts` (armazenamento), `drizzle/migrations` (banco de dados).
+## Android e publicação
+- Aplicativo Android (WebView) e fluxo de compilação em `android/` e `.github/workflows/android-apk.yml`.
+- O APK de teste usa `https://superfacil-estrategia.lovable.app/`. Alterar o código GitHub não modifica esse domínio automaticamente.
+- Link de download das versões Android de teste: https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP/releases
+- O APK de testes é assinado para depuração e necessita de conexão à internet. Antes de distribuir comercialmente, validar em aparelho real e assinar com certificado persistente.
 
-A marca emprega texto Super acima de Fácil com trevo verde. O ícone SVG incluído é um substituto vetorial da arte de referência, pois a exportação automática de binários não estava disponível. Não existe qualquer vantagem matemática garantida: todos os jogos simples de 15 dezenas têm a mesma chance em sorteios justos.
+## Status da validação
+O workflow **Validar SuperFácil Web** concluiu com sucesso no commit `1ec09850977684384d83a3f442f8ef06bdb0a291`, cobrindo testes, compilação e verificação TypeScript. Isso **não equivale** a auditoria de segurança nem a testes completos em aparelhos Android.
 
-## Limitações conhecidas
-- A rotina de importação automática dos 599 concursos e sincronização da planilha ainda precisa ser implementada.
-- A exportação do código para o GitHub não constitui ligação bidirecional automática com o editor Lovable.
-- O aplicativo não é um sistema oficial de apostas. Verificar compilação, segurança e navegação antes da distribuição.
-
-Projeto SuperFácil. Repositório: https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP
+Repositório: https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP
