@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { AppHeader, AppFooter } from "@/components/app/ui";
+import { AppSplash, AppUpdate } from "@/components/app/Startup";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -128,6 +129,8 @@ function RootComponent() {
         <AppHeader />
         <Outlet />
         <AppFooter />
+        <AppSplash />
+        <AppUpdate />
         <Toaster position="top-center" />
       </AuthProvider>
     </QueryClientProvider>

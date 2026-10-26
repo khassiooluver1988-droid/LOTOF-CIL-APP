@@ -2,30 +2,13 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3, Home, Grid3x3, Ticket, Menu, Database, AlertTriangle, CheckCircle2, Loader2, ShieldCheck, Headset, MessageCircle, ClipboardCheck, Lightbulb, Settings, ExternalLink, X } from "lucide-react";
 import { useState, useEffect, type ReactNode } from "react";
-import trevo from "@/assets/trevo.svg";
 import { baseQuery } from "@/lib/data";
 import { fmt, fmtNum } from "@/lib/lotofacil";
 
 export function Logo({ size = "md" }: { size?: "md" | "lg" }) {
-  const lg = size === "lg";
-  return (
-    <div className="flex items-center gap-2" aria-label="SuperFácil">
-      <img src={trevo} alt="" width={lg ? 64 : 40} height={lg ? 64 : 40} className={lg ? "h-16 w-16" : "h-10 w-10"} />
-      <div className="leading-none font-display">
-        <div className={`font-extrabold text-foreground ${lg ? "text-4xl" : "text-xl"}`}>Super</div>
-        <div className={`relative font-bold text-primary ${lg ? "text-2xl" : "text-sm"}`}>
-          F
-          <span className="relative inline-block">
-            á
-            <svg viewBox="0 0 24 14" className={`absolute left-1/2 -translate-x-1/2 fill-gold ${lg ? "-top-3.5 w-4" : "-top-2 w-2.5"}`} aria-hidden>
-              <path d="M2 13 L1 3 L7 8 L12 1 L17 8 L23 3 L22 13 Z" />
-            </svg>
-          </span>
-          cil
-        </div>
-      </div>
-    </div>
-  );
+  return <img src="/logo-superfacil.svg" alt="SuperFácil — Apostas, estratégia e dicas para a Lotofácil"
+    width={size === "lg" ? 275 : 190} height={size === "lg" ? 80 : 56}
+    className={size === "lg" ? "sf-logo-lg" : "sf-logo-md"} />;
 }
 
 const NAV = [

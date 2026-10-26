@@ -47,3 +47,18 @@ Configurar no `.env` apenas as variáveis públicas exigidas pelo projeto; segre
 O workflow **Validar SuperFácil Web** concluiu com sucesso no commit `1ec09850977684384d83a3f442f8ef06bdb0a291`, cobrindo testes, compilação e verificação TypeScript. Isso **não equivale** a auditoria de segurança nem a testes completos em aparelhos Android.
 
 Repositório: https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP
+
+
+## SuperFácil 2.0 (26/10/2026)
+- Identidade vetorial recriada em `public/logo-superfacil.svg`, com fundo transparente. **Arte vetorizada aproximada, não cópia pixel a pixel da imagem enviada**.
+- Quatro banners SVG editáveis/sem imagens de concursos fictícios: estratégias, prêmio estimado, jogo responsável, resultado anterior.
+- Carrossel navegável; informações do próximo concurso e premiação só são exibidas quando presentes na base `informacoes_concursos`.
+- Aviso inicial de maioridade 18+ por sessão; confirmação declaratória, não sistema de verificação de identidade.
+- Nova geração exige exclusão de **2 pares e 3 ímpares**, apresentando os 10 pares e 10 ímpares restantes.
+- Modos manual e automático; 3, 4, 6, 8 ou 10 jogos; cópia para preenchimento do volante.
+- Preço de referência (CAIXA, 26/10/2026): **R$ 3,50 por jogo simples de 15 dezenas**; tabela e custo total dinâmicos em `configuracoes_app` quando acessível.
+- Critério automático ordena combinações segundo histogramas históricos de pares/ímpares e repetidas, sem afirmar aumento de chance matemática.
+- `public/version.json` identifica a versão web, e o app pode sugerir recarregar quando detectar nova publicação no mesmo domínio. O APK **não** é atualizado por esse aviso: exige assinatura/versionCode consistentes, publicação do novo APK e instalação pelo usuário.
+- Avisos de segurança: HTTPS é propriedade da conexão e consulta ao Google Safe Browsing **não significa certificação, parceria nem 100% de proteção**.
+- Ainda não existe sincronização automática GitHub → Lovable. Publicação do APK permanece separada do código web.
+

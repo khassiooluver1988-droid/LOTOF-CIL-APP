@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { LogOut, Lightbulb, User, Database, ShieldAlert } from "lucide-react";
+import { LogOut, Lightbulb, User, Database, ShieldAlert, RefreshCcw, ExternalLink } from "lucide-react";
+import { VERSAO_APP } from "@/lib/version";
 import { AvisoResponsavel, BaseStatus, Page } from "@/components/app/ui";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -50,6 +51,19 @@ function Mais() {
       <section className="card-premium mt-3 p-4 text-sm">
         <h2 className="flex items-center gap-2 font-bold"><ShieldAlert className="h-4 w-4 text-warning" /> Sobre</h2>
         <p className="mt-2 text-muted-foreground">SuperFácil é uma ferramenta independente de estatística. Não é um app oficial, não vende apostas e não tem relação com a CAIXA ou Loterias CAIXA.</p>
+      </section>
+
+      <section className="card-premium mt-3 p-4 text-sm">
+        <h2 className="flex items-center gap-2 font-bold"><RefreshCcw className="h-4 w-4 text-primary" /> Atualizar aplicativo</h2>
+        <p className="mt-2 text-muted-foreground">Versão web {VERSAO_APP}. Se houver uma nova versão web publicada, o SuperFácil mostra um aviso para recarregar. A atualização do APK Android pode exigir uma nova instalação.</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" onClick={()=>window.location.reload()}
+            className="rounded-lg bg-primary px-3 py-2 font-bold text-primary-foreground">Verificar atualização web</button>
+          <a target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 font-bold text-primary"
+            href="https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP/releases">
+            Versões Android <ExternalLink size={14}/>
+          </a>
+        </div>
       </section>
       <AvisoResponsavel />
     </Page>

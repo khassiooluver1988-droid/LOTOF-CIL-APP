@@ -315,3 +315,8 @@
 .sf-hero-clover {width:210px;height:210px;object-fit:contain;filter:hue-rotate(170deg) saturate(1.8) drop-shadow(0 10px 8px rgba(95,8,164,.6));}
 @media (max-width:600px){ .sf-hero-clover{width:140px;height:140px} .sf-site-header .sf-brand img{width:49px;height:49px} }
 @media (max-width:360px){ .sf-hero-clover{width:114px;height:114px} .sf-site-header .sf-brand .text-4xl{font-size:1.65rem;line-height:1.1} }
+
+/* Ajusta a assinatura completa em telas compactas sem encolher o logotipo. */
+.sf-site-header .sf-brand img.sf-logo-md {width:min(190px,48vw);height:auto;max-height:86px;object-fit:contain}
+.sf-play-shell .sf-game-results .sf-ticket-balls {justify-content:flex-start}
+@media(max-width:360px){.sf-site-header .sf-brand img.sf-logo-md {width:min(160px,47vw);height:auto}}

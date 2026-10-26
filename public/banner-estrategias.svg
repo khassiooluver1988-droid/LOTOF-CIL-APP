@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370">
+<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#25054c"/><stop offset=".55" stop-color="#610c9f"/><stop offset="1" stop-color="#320458"/></linearGradient></defs>
+<rect width="960" height="370" rx="28" fill="url(#bg)"/><g opacity=".3" fill="#f7a7ff"><circle cx="750" cy="90" r="65"/><circle cx="825" cy="160" r="65"/><circle cx="670" cy="165" r="65"/><circle cx="750" cy="244" r="65"/></g><g font-family="Arial,sans-serif" fill="white"><text x="55" y="91" font-size="23">ESTRATÉGIAS E ESTATÍSTICAS</text><text x="55" y="165" font-size="57" font-weight="bold">Monte seus jogos</text><text x="55" y="226" font-size="57" font-weight="bold" fill="#5cf475">com o SuperFácil</text><text x="55" y="284" font-size="24">Exclua 5 dezenas e examine os padrões históricos.</text></g>
+</svg>

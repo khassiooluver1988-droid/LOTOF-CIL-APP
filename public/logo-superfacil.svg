@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="300" viewBox="0 0 1040 300">
+<defs>
+  <linearGradient id="leaf" x1=".1" y1=".05" x2=".9" y2="1"><stop stop-color="#d4ff43"/><stop offset=".45" stop-color="#49ea13"/><stop offset="1" stop-color="#008642"/></linearGradient>
+  <linearGradient id="silver" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset=".7" stop-color="#e7ecff"/><stop offset="1" stop-color="#9eb5d8"/></linearGradient>
+  <linearGradient id="green" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ecff2f"/><stop offset=".4" stop-color="#73fa11"/><stop offset="1" stop-color="#009f37"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff69c"/><stop offset=".4" stop-color="#ffbb12"/><stop offset="1" stop-color="#ab5a02"/></linearGradient>
+  <filter id="softshadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="2" dy="4" stdDeviation="3.5" flood-color="#001038" flood-opacity=".76"/></filter>
+</defs>
+<g filter="url(#softshadow)">
+  <g transform="translate(119 126) rotate(-14)" stroke="#00447d" stroke-width="6" stroke-linejoin="round">
+    <path fill="url(#leaf)" d="M-12 -13 C-120 -17 -128 -111 -69 -115 C-35 -115 -10 -62 -12 -13Z"/>
+    <path fill="url(#leaf)" d="M12 -13 C15 -122 101 -127 117 -71 C126 -33 65 -4 12 -13Z"/>
+    <path fill="url(#leaf)" d="M12 12 C118 15 121 104 69 117 C29 127 8 64 12 12Z"/>
+    <path fill="url(#leaf)" d="M-12 12 C-11 112 -99 123 -113 71 C-127 34 -68 8 -12 12Z"/>
+    <path d="M0 6C13 58 24 97 34 140" stroke="#00a047" fill="none" stroke-width="10" stroke-linecap="round"/>
+    <path d="M-45 -80 L-9 -15 M55 -91 L12 -15 M76 56 L12 12 M-63 68 L-11 12" stroke="#cfff72" stroke-width="3" opacity=".78"/>
+  </g>
+  <text x="232" y="143" font-family="Verdana,Arial,sans-serif" font-weight="900" font-size="144" letter-spacing="-10" fill="#051d5a" stroke="#02419e" stroke-width="15" paint-order="stroke">Super</text>
+  <text x="226" y="135" font-family="Verdana,Arial,sans-serif" font-weight="900" font-size="144" letter-spacing="-10" fill="url(#silver)" stroke="#132d86" stroke-width="4" paint-order="stroke">Super</text>
+  <text x="465" y="248" font-family="Verdana,Arial,sans-serif" font-weight="900" font-size="145" letter-spacing="-8" fill="#00475c" stroke="#044380" stroke-width="12" paint-order="stroke">Fácil</text>
+  <text x="460" y="239" font-family="Verdana,Arial,sans-serif" font-weight="900" font-size="145" letter-spacing="-8" fill="url(#green)" stroke="#06508c" stroke-width="3" paint-order="stroke">Fácil</text>
+  <path d="M711 42 L701 13 L730 28 L747 3 L770 30 L803 11 L786 44Z" fill="url(#gold)" stroke="#a35502" stroke-width="4"/>
+  <circle cx="700" cy="13" r="7" fill="#fff0a7"/><circle cx="747" cy="3" r="7" fill="#ffe473"/><circle cx="803" cy="11" r="7" fill="#ffef7c"/>
+  <g fill="#a326c9" stroke="#faabfa" stroke-width="5">
+    <circle cx="890" cy="160" r="51"/><circle cx="964" cy="183" r="36"/>
+  </g><g font-family="Arial,sans-serif" font-weight="900" fill="#fff" text-anchor="middle"><text x="890" y="179" font-size="53">15</text><text x="964" y="195" font-size="33">07</text></g>
+  <path d="M203 267 H998" stroke="#f5b828" stroke-width="6" stroke-linecap="round"/>
+  <text x="232" y="290" font-family="Verdana,Arial,sans-serif" font-size="19" letter-spacing="1" font-weight="700" fill="#f5eafc">APOSTAS, ESTRATÉGIA E DICAS PARA A LOTOFÁCIL</text>
+</g>
+</svg>
