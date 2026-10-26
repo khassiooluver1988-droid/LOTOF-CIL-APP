@@ -27,7 +27,8 @@ export function validarExclusoes(exclusoes: number[]): boolean {
   return (
     exclusoes.length === QTD_EXCLUSOES &&
     new Set(exclusoes).size === QTD_EXCLUSOES &&
-    exclusoes.every((d) => Number.isInteger(d) && d >= 1 && d <= 25)
+    exclusoes.every((d) => Number.isInteger(d) && d >= 1 && d <= 25) &&
+    paridade(exclusoes).pares === 2
   );
 }
 
@@ -63,7 +64,7 @@ export function gerarJogos(
   quantidade: number,
   rng: () => number = Math.random,
 ): number[][] {
-  if (!validarExclusoes(exclusoes)) throw new Error("Selecione exatamente 5 dezenas excluídas.");
+  if (!validarExclusoes(exclusoes)) throw new Error("Exclua exatamente 2 pares e 3 ímpares.");
   const pool = restantes(exclusoes);
   const q = Math.max(1, Math.min(Math.floor(quantidade), TOTAL_COMBINACOES));
   if (q === TOTAL_COMBINACOES) return todasCombinacoes(pool);
@@ -82,6 +83,29 @@ export function gerarJogos(
     jogos.push(jogo);
   }
   return jogos;
+}
+
+/** Seleciona combinações válidas, com filtro opcional de paridade. Não prevê sorteios. */
+export function gerarJogosPorPadrao(
+  exclusoes: number[],
+  quantidade: number,
+  paresDesejados: number | null,
+  rng: () => number = Math.random,
+): number[][] {
+  if (!validarExclusoes(exclusoes)) throw new Error("Exclua exatamente 2 pares e 3 ímpares.");
+  if (paresDesejados !== null && (!Number.isInteger(paresDesejados) || paresDesejados < 5 || paresDesejados > 10)) {
+    throw new Error("A quantidade de pares por jogo deve estar entre 5 e 10.");
+  }
+  const candidatas = todasCombinacoes(restantes(exclusoes)).filter((j) =>
+    paresDesejados === null || paridade(j).pares === paresDesejados,
+  );
+  if (!candidatas.length) return [];
+  const q = Math.max(1, Math.min(Math.floor(quantidade), candidatas.length));
+  for (let i = 0; i < q; i++) {
+    const k = i + Math.floor(rng() * (candidatas.length - i));
+    [candidatas[i], candidatas[k]] = [candidatas[k]!, candidatas[i]!];
+  }
+  return candidatas.slice(0, q);
 }
 
 export function paridade(dezenas: number[]) {

@@ -8,7 +8,7 @@ import { baseQuery } from "@/lib/data";
 import { useAuth } from "@/lib/auth";
 import { salvarLocais, salvarNuvem } from "@/lib/jogos-store";
 import {
-  DEZENAS, MAX_PADRAO, QTD_EXCLUSOES, TOTAL_COMBINACOES, fmt, fmtNum, gerarJogos, paridade, repetidas, restantes,
+  DEZENAS, MAX_PADRAO, QTD_EXCLUSOES, TOTAL_COMBINACOES, fmt, fmtNum, gerarJogos, gerarJogosPorPadrao, paridade, repetidas, restantes, distribuicaoParidade, validarExclusoes,
 } from "@/lib/lotofacil";
 
 export const Route = createFileRoute("/jogar")({
@@ -31,22 +31,42 @@ function Jogar() {
   const [todas, setTodas] = useState(false);
   const [jogos, setJogos] = useState<number[][] | null>(null);
   const [salvando, setSalvando] = useState(false);
+  const [modo, setModo] = useState<"sugerida" | "personalizada" | "livre">("sugerida");
+  const [paresAlvo, setParesAlvo] = useState(7);
   const { data: base } = useQuery(baseQuery);
   const { user } = useAuth();
 
-  const ok = exclusoes.length === QTD_EXCLUSOES;
+  const ok = validarExclusoes(exclusoes);
+  const paresExcluidos = paridade(exclusoes).pares;
+  const imparesExcluidos = exclusoes.length - paresExcluidos;
   const pool = useMemo(() => restantes(exclusoes), [exclusoes]);
-  const ultimo = base?.modo === "ok" ? base.concursos[0] : null;
+  const concursos = base?.modo === "ok" ? base.concursos : [];
+  const ultimo = concursos[0] ?? null;
+  const anterior = ultimo ? concursos.find((c) => c.numero === ultimo.numero - 1) : null;
+  const padraoSugerido = (concursos.length === 599 ? distribuicaoParidade(concursos) : []).find(({ padrao }) => {
+    const pares = Number(padrao.split("P")[0]);
+    return pares >= 5 && pares <= 10;
+  });
+  const paresSugeridos = padraoSugerido ? Number(padraoSugerido.padrao.split("P")[0]) : null;
 
   const toggle = (d: number) => {
     setJogos(null);
-    setExclusoes((s) => (s.includes(d) ? s.filter((x) => x !== d) : s.length >= QTD_EXCLUSOES ? s : [...s, d].sort((a, b) => a - b)));
+    setExclusoes((s) => {
+      if (s.includes(d)) return s.filter((x) => x !== d);
+      const pares = paridade(s).pares;
+      const impares = s.length - pares;
+      if (s.length >= QTD_EXCLUSOES || (d % 2 === 0 ? pares >= 2 : impares >= 3)) return s;
+      return [...s, d].sort((a, b) => a - b);
+    });
   };
 
   const gerar = () => {
     if (!ok) return;
     const n = todas ? TOTAL_COMBINACOES : Math.max(1, Math.min(MAX_PADRAO, qtd || 1));
-    setJogos(gerarJogos(exclusoes, n));
+    const pares = modo === "personalizada" ? paresAlvo : modo === "sugerida" ? paresSugeridos : null;
+    const novos = todas ? gerarJogos(exclusoes, n) : gerarJogosPorPadrao(exclusoes, n, pares);
+    if (!novos.length) { toast.error("Nenhuma combinação atende a esses critérios."); return; }
+    setJogos(novos);
   };
 
   const salvar = async () => {
@@ -83,10 +103,27 @@ function Jogar() {
   }, [jogos]);
 
   return (
-    <Page title="Jogar" subtitle="Toque em exatamente 5 dezenas para EXCLUIR do jogo.">
+    <Page title="Jogar" subtitle="Analise os concursos, exclua 2 pares e 3 ímpares e gere jogos com as 20 dezenas restantes.">
+      <section className="card-premium mb-4 space-y-3 p-4">
+        <h2 className="text-base font-bold">Etapa 1 · Último concurso e análise histórica</h2>
+        {ultimo ? (
+          <>
+            <p className="text-sm">Último concurso na base: <strong>{ultimo.numero}</strong> · {paridade(ultimo.dezenas).pares} pares e {paridade(ultimo.dezenas).impares} ímpares
+              {anterior ? ` · ${repetidas(ultimo.dezenas, anterior.dezenas)} repetidas do anterior` : " · repetidas indisponíveis"}.</p>
+            <div className="flex flex-wrap gap-1">{[...ultimo.dezenas].sort((a, b) => a - b).map((d) => <Bola key={d} n={d} tom="lime" />)}</div>
+          </>
+        ) : <p className="text-sm text-muted-foreground">Último concurso indisponível. A base precisa ser sincronizada.</p>}
+        <p className="text-sm text-muted-foreground">Janela de análise: <strong>{concursos.length} de 599</strong> concursos recentes efetivamente disponíveis.</p>
+        <p className="text-sm">{padraoSugerido
+          ? `Dica descritiva: ${padraoSugerido.padrao}, observado ${padraoSugerido.vezes} vezes nesta amostra.`
+          : "Sem dica estatística disponível. É possível gerar combinações com critérios manuais."}</p>
+        <p className="text-xs text-muted-foreground">Frequência histórica não garante acertos futuros. Confira a data da última atualização da base.</p>
+        <Link to="/analise" className="text-sm font-semibold text-primary underline">Consultar análise completa</Link>
+      </section>
       <section className="card-premium p-4">
+        <h2 className="mb-3 font-bold">Etapa 2 · Excluir 2 pares e 3 ímpares</h2>
         <div className="mb-3 flex items-center justify-between">
-          <span className={`font-display text-lg font-bold ${ok ? "text-primary" : ""}`} aria-live="polite">{exclusoes.length}/{QTD_EXCLUSOES} excluídas</span>
+          <span className={`font-display text-lg font-bold ${ok ? "text-primary" : ""}`} aria-live="polite">{exclusoes.length}/{QTD_EXCLUSOES} excluídas · {paresExcluidos}P + {imparesExcluidos}I</span>
           <button onClick={() => { setExclusoes([]); setJogos(null); }} disabled={!exclusoes.length} className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold disabled:opacity-40">
             <Eraser className="h-3.5 w-3.5" /> Limpar seleção
           </button>
@@ -94,7 +131,7 @@ function Jogar() {
         <div className="grid grid-cols-5 gap-2">
           {DEZENAS.map((d) => {
             const sel = exclusoes.includes(d);
-            const bloq = !sel && ok;
+            const bloq = !sel && (ok || (d % 2 === 0 ? paresExcluidos >= 2 : imparesExcluidos >= 3));
             return (
               <button key={d} onClick={() => toggle(d)} disabled={bloq} aria-pressed={sel} aria-label={`Dezena ${fmt(d)}${sel ? " excluída" : ""}`}
                 className={`aspect-square rounded-2xl font-display text-lg font-bold transition-all active:scale-95 ${sel ? "bg-destructive text-destructive-foreground shadow-lg ring-2 ring-destructive/50" : "bg-secondary text-foreground hover:bg-accent"} ${bloq ? "opacity-40" : ""}`}>
@@ -107,10 +144,31 @@ function Jogar() {
 
       <section className="card-premium mt-4 p-4">
         <h2 className="text-sm font-bold">{pool.length} dezenas restantes</h2>
+        <p className="text-xs text-muted-foreground">Seleção válida: {paridade(pool).pares} pares e {paridade(pool).impares} ímpares restantes.</p>
         <div className="mt-3 flex flex-wrap gap-1.5">{pool.map((d) => <Bola key={d} n={d} tom={ok ? "lime" : "ghost"} />)}</div>
       </section>
 
       <section className="card-premium mt-4 space-y-3 p-4">
+        <h2 className="font-bold">Etapa 3 · Escolher estratégia e gerar jogos</h2>
+        <label className="block text-sm font-semibold" htmlFor="sf-estrategia">Critério de geração</label>
+        <select id="sf-estrategia" value={modo} onChange={(e) => { setModo(e.target.value as typeof modo); setJogos(null); }}
+          className="w-full rounded-xl border bg-input/30 p-3 text-sm">
+          <option value="sugerida">Dica estatística (quando disponível)</option>
+          <option value="personalizada">Minha estratégia · definir paridade</option>
+          <option value="livre">Combinações livres com as 20 dezenas</option>
+        </select>
+        {modo === "personalizada" && <label className="block text-sm font-semibold">
+          Quantidade de pares por jogo
+          <select value={paresAlvo} onChange={(e) => { setParesAlvo(Number(e.target.value)); setJogos(null); }}
+            className="mt-2 w-full rounded-xl border bg-input/30 p-3">
+            {[5, 6, 7, 8, 9, 10].map((p) => <option key={p} value={p}>{p} pares / {15 - p} ímpares</option>)}
+          </select>
+        </label>}
+        <p className="text-xs text-muted-foreground">
+          {modo === "sugerida"
+            ? paresSugeridos !== null ? `Paridade observada: ${paresSugeridos}P/${15 - paresSugeridos}I. É uma contagem histórica, não previsão.` : "Sem base histórica: serão usadas combinações livres, sem inventar recomendações."
+            : modo === "personalizada" ? `Filtro escolhido: ${paresAlvo}P/${15 - paresAlvo}I.` : "Sem filtro estatístico."}
+        </p>
         <label className="flex items-center justify-between gap-3 text-sm font-semibold">
           Quantidade de jogos (1 a {MAX_PADRAO})
           <input type="number" min={1} max={MAX_PADRAO} value={qtd} disabled={todas}
@@ -124,7 +182,7 @@ function Jogar() {
         <button onClick={gerar} disabled={!ok} className="bg-lime-gradient shadow-glow flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-bold text-primary-foreground disabled:opacity-40 disabled:shadow-none">
           <Sparkles className="h-5 w-5" /> Analisar e gerar jogos
         </button>
-        {!ok && <p className="text-center text-xs text-muted-foreground">Selecione exatamente 5 dezenas para continuar (faltam {QTD_EXCLUSOES - exclusoes.length}).</p>}
+        {!ok && <p className="text-center text-xs text-muted-foreground">Exclua 2 pares e 3 ímpares. Faltam {2 - paresExcluidos} pares e {3 - imparesExcluidos} ímpares.</p>}
       </section>
 
       {jogos && (
@@ -155,7 +213,10 @@ function Jogar() {
                     <span>Jogo {i + 1}</span>
                     <span>{p.pares}P / {p.impares}I{r !== null && ` / ${r}R`}</span>
                   </div>
-                  <div className="flex flex-wrap gap-1">{j.map((d) => <Bola key={d} n={d} tom={ultimo?.dezenas.includes(d) ? "lime" : "base"} />)}</div>
+                  <p className="mb-1 text-[11px] text-muted-foreground">Pares · primeira linha</p>
+                  <div className="mb-2 flex flex-wrap gap-1">{j.filter((d) => d % 2 === 0).map((d) => <Bola key={d} n={d} tom={ultimo?.dezenas.includes(d) ? "lime" : "base"} />)}</div>
+                  <p className="mb-1 text-[11px] text-muted-foreground">Ímpares · segunda linha</p>
+                  <div className="flex flex-wrap gap-1">{j.filter((d) => d % 2 !== 0).map((d) => <Bola key={d} n={d} tom={ultimo?.dezenas.includes(d) ? "lime" : "base"} />)}</div>
                 </li>
               );
             })}
