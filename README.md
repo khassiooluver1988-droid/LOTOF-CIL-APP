@@ -70,3 +70,7 @@ Repositório: https://github.com/khassiooluver1988-droid/LOTOF-CIL-APP
 - Avisos de segurança: HTTPS é propriedade da conexão e consulta ao Google Safe Browsing **não significa certificação, parceria nem 100% de proteção**.
 - Ainda não existe sincronização automática GitHub → Lovable. Publicação do APK permanece separada do código web.
 
+
+## Informativos no carrossel — 26/10/2026
+
+Três banners em SVG responsivos **recriados no estilo visual das imagens de referência**, com manchetes verificadas do UOL e Itatiaia; o quarto banner orienta sobre jogo responsável. As artes são recriações vetoriais, não os PNGs renderizados originalmente. Tocar nos três banners informativos abre a reportagem ou a página de resultados original em uma nova aba, sem exibir o endereço na própria arte. São reportagens datadas, não informações atualizadas em tempo real. O carrossel é usado na demonstração GitHub Pages e no componente React para futura publicação.

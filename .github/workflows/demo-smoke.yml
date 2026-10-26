@@ -27,7 +27,7 @@ jobs:
           for(let i=0;i<nums.length;i++) {
             if(nums[i].numero!==3812-i || nums[i].dezenas.length!==15 || new Set(nums[i].dezenas).size!==15) throw Error('Concurso inválido '+nums[i].numero);
           }
-          for(const f of ['demo/styles.css','demo/app.js','demo/version.json','public/logo-superfacil.svg','public/banner-estrategias.svg','public/banner-premio.svg','public/banner-responsavel.svg','public/banner-resultado.svg']) {
+          for(const f of ['public/banner-noticia-3813.svg','public/banner-noticia-3814.svg','public/banner-noticia-resultados.svg','demo/styles.css','demo/app.js','demo/version.json','public/logo-superfacil.svg','public/banner-estrategias.svg','public/banner-premio.svg','public/banner-responsavel.svg','public/banner-resultado.svg']) {
             if(!fs.existsSync(f)) throw Error('Arquivo ausente: '+f);
           }
           if(!html.includes('demo/app.js')||!html.includes('demo/styles.css'))throw Error('HTML não carrega o aplicativo');

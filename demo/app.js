@@ -1,7 +1,7 @@
 
 const $ = (s) => document.querySelector(s);
 const app=$("#app");
-const version="2026-10-26.3", unit=3.50;
+const version="2026-10-26.4", unit=3.50;
 let contests=[],slide=0,excluded=[],chosen=[],games=[],qty=3,mode="auto",selectedContest=null,loadError=false;
 let saved=[];try{saved=JSON.parse(localStorage.getItem("superfacil-demo-games")||"[]");if(!Array.isArray(saved))saved=[]}catch{saved=[]}
 const number=n=>String(n).padStart(2,"0");
@@ -15,10 +15,10 @@ const dateBR=s=>s?new Date(s+"T12:00:00").toLocaleDateString("pt-BR"):"Não disp
 const previousIntersection=(a,b)=>{const s=new Set(b);return a.filter(n=>s.has(n)).length};
 const routes=new Set(["inicio","jogar","analise","resultados","dicas","salvos"]);
 const banners=[
-{src:"./public/banner-estrategias.svg",label:"Vantagens e estratégias",to:"jogar"},
-{src:"./public/banner-premio.svg",label:"Informações sobre o prêmio estimado",to:"resultados"},
-{src:"./public/banner-responsavel.svg",label:"Jogo com responsabilidade",to:"dicas"},
-{src:"./public/banner-resultado.svg",label:"Resultado do concurso anterior",to:"resultados"}
+{src:"./public/banner-noticia-3813.svg",label:"UOL: ninguém acerta Lotofácil 3813 e prêmio vai a R$ 5 milhões",url:"https://noticias.uol.com.br/ultimas-noticias/redacao/2026/10/24/lotofacil-concurso-3813-sorteio-24-de-outubro.amp.htm"},
+{src:"./public/banner-noticia-3814.svg",label:"Itatiaia: Lotofácil sorteia R$ 5 milhões no concurso 3814",url:"https://www.itatiaia.com.br/brasil/brasil-geral/lotofacil-sorteia-r-5-milhoes-no-concurso-3814-nesta-segunda-feira-26/"},
+{src:"./public/banner-noticia-resultados.svg",label:"UOL: resultados, números e sorteios da Lotofácil",url:"https://noticias.uol.com.br/loterias/lotofacil/"},
+{src:"./public/banner-responsavel.svg",label:"Jogue com responsabilidade",to:"dicas"}
 ];
 function make(tag,attrs={},body=""){const el=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));el.innerHTML=body;return el}
 function popup(msg){let prev=$("#notice");if(prev)prev.remove();const n=make("div",{id:"notice",role:"status",style:"position:fixed;z-index:60;bottom:14px;left:50%;transform:translateX(-50%);background:#200538;color:white;padding:12px 18px;border-radius:10px;box-shadow:0 8px 22px #0008;width:max-content;max-width:94vw;text-align:center"},msg);document.body.append(n);setTimeout(()=>n.remove(),3400)}
@@ -36,7 +36,7 @@ function render(){
 }
 function home(){
  const prev=last();
- return '<section aria-label="Carrossel de quatro banners"><div class="carousel-frame"><a href="#'+banners[slide].to+'"><img class="carousel-img" src="'+banners[slide].src+'" alt="'+banners[slide].label+'"></a><button class="car-btn prev" data-action="slideprev" aria-label="Banner anterior">‹</button><button class="car-btn next" data-action="slidenext" aria-label="Próximo banner">›</button></div><div class="dots">'+banners.map((b,i)=>'<button class="'+(i===slide?'active':'')+'" data-action="slide" data-id="'+i+'" aria-label="'+b.label+'" aria-current="'+(i===slide)+'"></button>').join("")+'</div></section>'+
+ return '<section aria-label="Carrossel de quatro banners"><div class="carousel-frame"><a href="'+(banners[slide].url||"#"+banners[slide].to)+'" '+(banners[slide].url?'target="_blank" rel="noopener noreferrer"':'')+' aria-label="Abrir notícia: '+banners[slide].label+'"><img class="carousel-img" src="'+banners[slide].src+'" alt="'+banners[slide].label+'"></a><button class="car-btn prev" data-action="slideprev" aria-label="Banner anterior">‹</button><button class="car-btn next" data-action="slidenext" aria-label="Próximo banner">›</button></div><div class="dots">'+banners.map((b,i)=>'<button class="'+(i===slide?'active':'')+'" data-action="slide" data-id="'+i+'" aria-label="'+b.label+'" aria-current="'+(i===slide)+'"></button>').join("")+'</div></section>'+
  '<section class="current" aria-label="Próximo concurso"><div><b>🏆 Próximo concurso</b><h2>Não confirmado</h2><small>Data e horário: aguardando fonte oficial</small></div><div><span>Prêmio estimado</span><br><strong>Não disponível</strong><br><small>Sem informação oficial sincronizada.</small></div></section>'+
  '<div class="home-actions"><a href="#jogar">🎲 GERAR JOGOS →</a><a href="#dicas">💡 DICAS →</a></div>'+
  '<section class="card"><div class="row" style="justify-content:space-between"><div><b>🍀 Último concurso na base</b><h2 class="page-title">Nº '+prev.numero.toLocaleString("pt-BR")+'</h2><span class="muted">'+dateBR(prev.data)+'</span></div><a class="btn outline" href="#resultados">Ver detalhes →</a></div><div style="margin:14px 0">'+balls(prev.dezenas)+'</div><div class="results-meta"><div>🏅 Ganhadores de 15 acertos<strong>Não disponível</strong></div><div>💰 Prêmio por ganhador<strong>Não disponível</strong></div></div></section>'+
