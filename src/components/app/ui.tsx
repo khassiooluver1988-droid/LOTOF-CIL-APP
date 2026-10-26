@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Home, Grid3x3, Ticket, Menu, Database, AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
-import type { ReactNode } from "react";
+import { BarChart3, Home, Grid3x3, Ticket, Menu, Database, AlertTriangle, CheckCircle2, Loader2, ShieldCheck, Headset, MessageCircle, ClipboardCheck, Lightbulb, Settings, ExternalLink, X } from "lucide-react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import trevo from "@/assets/trevo.svg";
 import { baseQuery } from "@/lib/data";
 import { fmt, fmtNum } from "@/lib/lotofacil";
@@ -32,34 +32,94 @@ const NAV = [
   { to: "/", label: "Início", icon: Home },
   { to: "/jogar", label: "Jogar", icon: Grid3x3 },
   { to: "/analise", label: "Análise", icon: BarChart3 },
+  { to: "/resultados", label: "Análise de resultados", icon: ClipboardCheck },
   { to: "/meus-jogos", label: "Meus jogos", icon: Ticket },
-  { to: "/mais", label: "Mais", icon: Menu },
+  { to: "/dicas", label: "Dicas", icon: Lightbulb },
+  { to: "/mais", label: "Conta e configurações", icon: Settings },
 ] as const;
 
+/** Rodapé compacto, sem faixa opaca, e menu de navegação recolhível. */
 export function BottomNav() {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const [open, setOpen] = useState(false);
+  const [whatsappMotion, setWhatsappMotion] = useState(false);
+  const region = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (e: PointerEvent) => {
+      if (region.current && !region.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!whatsappMotion) return;
+    const t = window.setTimeout(() => setWhatsappMotion(false), 420);
+    return () => window.clearTimeout(t);
+  }, [whatsappMotion]);
+
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/90 backdrop-blur-lg pb-[env(safe-area-inset-bottom)]" aria-label="Navegação principal">
-      <ul className="mx-auto grid max-w-xl grid-cols-5">
-        {NAV.map(({ to, label, icon: Icon }) => {
-          const ativo = to === "/" ? path === "/" : path.startsWith(to);
-          return (
-            <li key={to}>
-              <Link to={to} className={`flex flex-col items-center gap-1 py-2.5 text-[11px] font-semibold transition-colors ${ativo ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
-                <Icon className="h-5 w-5" />
-                {label}
+    <div ref={region} className="fixed inset-x-0 bottom-0 z-50 pointer-events-none pb-[env(safe-area-inset-bottom)]" aria-label="Rodapé do SuperFácil">
+      <div className="pointer-events-auto mx-auto max-w-3xl px-2 pb-2">
+        {open && (
+          <nav id="menu-superfacil" aria-label="Menu principal" className="superfacil-menu absolute bottom-full right-2 mb-2 w-[min(19rem,calc(100vw-1rem))] overflow-hidden rounded-2xl border border-border bg-popover p-2 text-foreground shadow-2xl">
+            <div className="flex items-center justify-between px-3 py-2">
+              <span className="font-semibold text-sm">Navegação</span>
+              <button type="button" onClick={() => setOpen(false)} aria-label="Fechar menu" className="rounded-lg p-1.5 hover:bg-accent"><X className="h-4 w-4" /></button>
+            </div>
+            {NAV.map(({ to, label, icon: Icon }) => (
+              <Link key={to} to={to} onClick={() => setOpen(false)} aria-current={path === to ? "page" : undefined}
+                className={`flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${path === to ? "bg-primary/15 text-primary" : "hover:bg-accent"}`}>
+                <Icon className="h-4 w-4" aria-hidden="true" /><span>{label}</span>
               </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+            ))}
+          </nav>
+        )}
+        <footer className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-[10px] leading-tight text-muted-foreground" aria-label="Identificação e suporte">
+          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap"><ShieldCheck className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Conexão HTTPS</span>
+            <a href="https://transparencyreport.google.com/safe-browsing/search?url=superfacil-estrategia.lovable.app"
+              target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 underline underline-offset-2 hover:text-foreground"
+              aria-label="Consultar endereço no Google Safe Browsing (verificação externa, sem certificação oficial)">
+              Verificar no Google <ExternalLink className="h-3 w-3" aria-hidden="true"/>
+            </a>
+            <a href="https://wa.me/5586994465882?text=Ol%C3%A1%2C%20preciso%20de%20suporte%20para%20o%20SuperF%C3%A1cil."
+              target="_blank" rel="noopener noreferrer" onClick={() => setWhatsappMotion(true)}
+              className={`inline-flex items-center gap-1 rounded-full px-1.5 py-1 text-primary transition-transform duration-200 active:scale-90 ${whatsappMotion ? "superfacil-whatsapp-pop" : ""}`}
+              aria-label="Abrir atendimento via WhatsApp no número 86 99446-5882">
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              <Headset className="h-3 w-3" aria-hidden="true"/>
+              <span className="font-semibold whitespace-nowrap">86 99446-5882</span>
+            </a>
+          </div>
+          <button type="button" aria-controls="menu-superfacil" aria-expanded={open} aria-label={open ? "Fechar menu de navegação" : "Abrir menu de navegação"}
+            onClick={() => setOpen(v => !v)}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-border bg-primary/15 px-3 py-2 text-xs font-bold text-primary transition-transform active:scale-95">
+            <Menu className="h-5 w-5" aria-hidden="true" /> Menu
+          </button>
+          <p className="w-full text-center text-[9px] leading-tight opacity-90">
+            Desenvolvido por <strong className="font-semibold text-foreground">Khassio Silva</strong>
+            <span aria-hidden="true"> · </span>
+            Gerenciado por <strong className="font-semibold text-foreground">Insight Marketing e Desenvolvimento</strong>
+          </p>
+        </footer>
+      </div>
+    </div>
   );
 }
 
 export function Page({ title, subtitle, children }: { title?: string; subtitle?: string; children: ReactNode }) {
   return (
-    <main className="mx-auto max-w-xl px-4 pb-28 pt-5">
+    <main className="mx-auto max-w-xl px-4 pb-40 pt-5">
       <header className="mb-5 flex items-center justify-between">
         <Link to="/"><Logo /></Link>
         <span className="rounded-full border px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">App independente · 18+</span>

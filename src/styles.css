@@ -95,3 +95,17 @@
 @utility shadow-glow {
   box-shadow: var(--shadow-glow);
 }
+/* Compact navigation footer, transparent as requested. Only expanded menu has a surface. */
+@keyframes superfacil-wa-click {
+  0% { transform: scale(1); }
+  38% { transform: scale(.84) rotate(-9deg); }
+  75% { transform: scale(1.10) rotate(7deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.superfacil-whatsapp-pop { animation: superfacil-wa-click 420ms ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .superfacil-whatsapp-pop { animation: none; }
+}
+@media (max-height: 520px) {
+  .superfacil-menu { max-height: 68dvh; overflow-y: auto; }
+}
