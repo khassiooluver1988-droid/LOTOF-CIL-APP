@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   TOTAL_COMBINACOES, TOTAL_LOTOFACIL, gerarJogos, paridade, repetidas,
-  validarExclusoes, todasCombinacoes, restantes, distribuicaoRepetidas,
+  validarExclusoes, todasCombinacoes, restantes, distribuicaoRepetidas, gerarJogosPorPadrao,
 } from "./lotofacil";
 
 const ex = [1, 2, 3, 4, 5];
@@ -15,6 +15,8 @@ describe("Lotofácil", () => {
     expect(validarExclusoes([1, 2, 3, 4])).toBe(false);
     expect(validarExclusoes([1, 2, 3, 4, 5, 6])).toBe(false);
     expect(validarExclusoes(ex)).toBe(true);
+    expect(validarExclusoes([2, 4, 6, 1, 3])).toBe(false);
+    expect(validarExclusoes([1, 3, 5, 7, 2])).toBe(false);
     expect(() => gerarJogos([1, 2, 3, 4], 10)).toThrow();
   });
   it("gera 10 jogos distintos de 15 sem excluídas", () => {
@@ -30,6 +32,17 @@ describe("Lotofácil", () => {
     const all = todasCombinacoes(restantes(ex));
     expect(all).toHaveLength(15504);
     expect(new Set(all.map((j) => j.join())).size).toBe(15504);
+  });
+  it("gera jogos por paridade sem incluir dezenas excluídas", () => {
+    const jogos = gerarJogosPorPadrao(ex, 12, 7);
+    expect(jogos).toHaveLength(12);
+    expect(new Set(jogos.map((j) => j.join())).size).toBe(12);
+    jogos.forEach((j) => {
+      expect(paridade(j).pares).toBe(7);
+      expect(j).toHaveLength(15);
+      expect(j.every((n) => !ex.includes(n))).toBe(true);
+    });
+    expect(() => gerarJogosPorPadrao([2, 4, 6, 1, 3], 2, 7)).toThrow();
   });
   it("paridade e repetidas corretas", () => {
     const j = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
