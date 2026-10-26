@@ -37,16 +37,18 @@ jobs:
         run: gradle -p android :app:assembleDebug --no-daemon --stacktrace
       - name: Verificar arquivo gerado
         run: test -s android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Renomear APK versão 2.0.1
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk android/app/build/outputs/apk/debug/SuperFacil-Android-v2.apk
       - name: Guardar APK como artefato
         uses: actions/upload-artifact@v4
         with:
-          name: SuperFacil-Android-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: SuperFacil-Android-v2-APK
+          path: android/app/build/outputs/apk/debug/SuperFacil-Android-v2.apk
           retention-days: 30
       - name: Publicar APK em release de testes
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=superfacil-android-beta
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "SuperFácil Android — teste" --notes "APK de testes do SuperFácil. Requer internet. Instalação manual no Android; não é versão definitiva para Play Store." --prerelease
-          gh release upload "$TAG" "android/app/build/outputs/apk/debug/app-debug.apk#SuperFacil-Android.apk" --clobber
+          TAG=superfacil-android-v2-beta
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "SuperFácil Android v2.0.1 — Beta" --notes "APK de testes do SuperFácil 2.0.1. Abre demonstração GitHub Pages e exige internet. Se o APK anterior foi instalado com certificado de depuração diferente, desinstale-o antes de instalar esta versão. Sem garantia de atualização em segundo plano." --prerelease
+          gh release upload "$TAG" "android/app/build/outputs/apk/debug/SuperFacil-Android-v2.apk" --clobber

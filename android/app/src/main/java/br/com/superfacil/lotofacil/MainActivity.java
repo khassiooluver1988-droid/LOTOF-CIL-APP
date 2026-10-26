@@ -24,7 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-    private static final String HOME = "https://superfacil-estrategia.lovable.app/";
+    private static final String HOME = "https://khassiooluver1988-droid.github.io/LOTOF-CIL-APP/app.html?versao=2.0.1";
     private WebView webView;
     private LinearLayout placeholder;
     private ProgressBar progress;
@@ -114,7 +114,7 @@ public class MainActivity extends Activity {
                 String scheme = uri.getScheme();
                 String host = uri.getHost();
                 if ("https".equalsIgnoreCase(scheme) &&
-                        "superfacil-estrategia.lovable.app".equalsIgnoreCase(host)) {
+                        "khassiooluver1988-droid.github.io".equalsIgnoreCase(host)) {
                     return false;
                 }
                 try {
