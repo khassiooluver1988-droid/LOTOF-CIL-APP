@@ -55,7 +55,7 @@ export function AppHeader() {
       <div className="sf-head-inner">
         <div className="sf-topline">
           <Link to="/" className="sf-brand" aria-label="SuperFácil início" onClick={() => setOpen(false)}>
-            <Logo />
+            <Logo size="lg" />
           </Link>
           <nav className="sf-desktop-nav" aria-label="Navegação principal">
             {TOP_NAV.map(({ to, label, icon: Icon }) =>

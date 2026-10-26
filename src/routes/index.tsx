@@ -47,7 +47,7 @@ function Home() {
           </Link>
         </div>
         <div className="sf-hero-art" aria-hidden="true">
-          <div className="sf-hero-clover">♣</div>
+          <img className="sf-hero-clover" src="/favicon.svg" alt="" />
           <div className="sf-lottery-slip">
             <div className="sf-slip-top">SuperFácil <span>15 dezenas</span></div>
             <div className="sf-slip-grid">{Array.from({ length: 25 }, (_, i) => <span key={i}>{String(i + 1).padStart(2, "0")}</span>)}</div>
