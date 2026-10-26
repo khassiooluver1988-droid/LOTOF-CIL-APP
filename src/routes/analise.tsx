@@ -50,7 +50,7 @@ function Analise() {
 }
 
 function Conteudo({ c }: { c: Concurso[] }) {
-  const ultimo = c[0];
+  const ultimo = c[0]!;
   const anterior = c.find((x) => x.numero === ultimo.numero - 1);
   const pUlt = paridade(ultimo.dezenas);
   const rUlt = repetidas(ultimo.dezenas, anterior?.dezenas);
@@ -71,7 +71,7 @@ function Conteudo({ c }: { c: Concurso[] }) {
 
       <section className="card-premium space-y-2 p-4">
         <h2 className="font-bold">Pares / ímpares ({c.length} concursos)</h2>
-        {par.map((x) => <Barra key={x.padrao} label={x.padrao} v={x.vezes} max={par[0].vezes} total={c.length} />)}
+        {par.map((x) => <Barra key={x.padrao} label={x.padrao} v={x.vezes} max={par[0]!.vezes} total={c.length} />)}
       </section>
 
       <section className="card-premium space-y-2 p-4">

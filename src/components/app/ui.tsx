@@ -164,13 +164,14 @@ export function BaseStatus() {
       </div>
     );
   const c = data.concursos;
-  const ultimo = c[0];
+  if (!c.length) return null;
+  const ultimo = c[0]!;
   return (
     <div className="card-premium p-4">
       <div className="flex items-center gap-2 font-semibold"><CheckCircle2 className="h-5 w-5 text-primary" /> Base sincronizada</div>
       <dl className="mt-3 grid grid-cols-3 gap-2 text-center">
         <div className="rounded-xl bg-muted/60 p-2"><dt className="text-[10px] uppercase text-muted-foreground">Concursos</dt><dd className="font-display text-lg font-bold">{fmtNum(c.length)}</dd></div>
-        <div className="rounded-xl bg-muted/60 p-2"><dt className="text-[10px] uppercase text-muted-foreground">Faixa</dt><dd className="font-display text-sm font-bold">{c[c.length - 1].numero}–{ultimo.numero}</dd></div>
+        <div className="rounded-xl bg-muted/60 p-2"><dt className="text-[10px] uppercase text-muted-foreground">Faixa</dt><dd className="font-display text-sm font-bold">{c[c.length - 1]!.numero}–{ultimo.numero}</dd></div>
         <div className="rounded-xl bg-muted/60 p-2"><dt className="text-[10px] uppercase text-muted-foreground">Último</dt><dd className="font-display text-sm font-bold">{new Date(ultimo.data + "T12:00").toLocaleDateString("pt-BR")}</dd></div>
       </dl>
       {data.importacao && <p className="mt-2 text-xs text-muted-foreground">Última importação: {data.importacao.status} · {data.importacao.linhas} linhas · {new Date(data.importacao.data).toLocaleString("pt-BR")}</p>}

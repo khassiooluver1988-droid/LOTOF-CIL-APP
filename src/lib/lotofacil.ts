@@ -52,8 +52,8 @@ export function todasCombinacoes(pool: number[]): number[][] {
     let i = remover - 1;
     while (i >= 0 && idx[i] === n - remover + i) i--;
     if (i < 0) break;
-    idx[i]++;
-    for (let j = i + 1; j < remover; j++) idx[j] = idx[j - 1] + 1;
+    idx[i] = idx[i]! + 1;
+    for (let j = i + 1; j < remover; j++) idx[j] = idx[j - 1]! + 1;
   }
   return out;
 }
@@ -73,7 +73,7 @@ export function gerarJogos(
     const arr = [...pool];
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(rng() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+      [arr[i], arr[j]] = [arr[j]!, arr[i]!];
     }
     const jogo = arr.slice(0, TAMANHO_JOGO).sort((a, b) => a - b);
     const chave = jogo.join("-");
@@ -122,8 +122,8 @@ export function distribuicaoRepetidas(concursos: Concurso[]) {
   const ord = [...concursos].sort((a, b) => a.numero - b.numero);
   const m = new Map<number, number>();
   for (let i = 1; i < ord.length; i++) {
-    if (ord[i].numero !== ord[i - 1].numero + 1) continue; // não inventa faltantes
-    const r = repetidas(ord[i].dezenas, ord[i - 1].dezenas)!;
+    if (ord[i]!.numero !== ord[i - 1]!.numero + 1) continue; // não inventa faltantes
+    const r = repetidas(ord[i]!.dezenas, ord[i - 1]!.dezenas)!;
     m.set(r, (m.get(r) ?? 0) + 1);
   }
   return [...m.entries()].map(([rep, vezes]) => ({ rep, vezes })).sort((a, b) => a.rep - b.rep);
@@ -134,9 +134,9 @@ export function distribuicaoPIR(concursos: Concurso[]) {
   const ord = [...concursos].sort((a, b) => a.numero - b.numero);
   const m = new Map<string, number>();
   for (let i = 1; i < ord.length; i++) {
-    if (ord[i].numero !== ord[i - 1].numero + 1) continue;
-    const { pares, impares } = paridade(ord[i].dezenas);
-    const r = repetidas(ord[i].dezenas, ord[i - 1].dezenas)!;
+    if (ord[i]!.numero !== ord[i - 1]!.numero + 1) continue;
+    const { pares, impares } = paridade(ord[i]!.dezenas);
+    const r = repetidas(ord[i]!.dezenas, ord[i - 1]!.dezenas)!;
     const k = `${pares}P/${impares}I/${r}R`;
     m.set(k, (m.get(k) ?? 0) + 1);
   }
