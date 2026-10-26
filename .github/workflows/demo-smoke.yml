@@ -1,0 +1,35 @@
+name: Validar demo SuperFácil
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'demo/**'
+      - '.github/workflows/demo-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar sintaxe JavaScript
+        run: node --check demo/app.js
+      - name: Conferir estrutura da demonstração e 599 concursos
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const data = JSON.parse(fs.readFileSync('demo/dados.json','utf8'));
+          const html = fs.readFileSync('index.html','utf8');
+          const nums = data.concursos;
+          if(nums.length!==599 || nums[0].numero!==3812 || nums[598].numero!==3214) throw Error('Janela histórica incorreta');
+          for(let i=0;i<nums.length;i++) {
+            if(nums[i].numero!==3812-i || nums[i].dezenas.length!==15 || new Set(nums[i].dezenas).size!==15) throw Error('Concurso inválido '+nums[i].numero);
+          }
+          for(const f of ['demo/styles.css','demo/app.js','demo/version.json','public/logo-superfacil.svg','public/banner-estrategias.svg','public/banner-premio.svg','public/banner-responsavel.svg','public/banner-resultado.svg']) {
+            if(!fs.existsSync(f)) throw Error('Arquivo ausente: '+f);
+          }
+          if(!html.includes('demo/app.js')||!html.includes('demo/styles.css'))throw Error('HTML não carrega o aplicativo');
+          console.log('Demonstração verificada: 599 concursos, sintaxe JS válida, arquivos presentes.');
+          NODE
