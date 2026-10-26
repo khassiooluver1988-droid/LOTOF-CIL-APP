@@ -1,0 +1,30 @@
+name: Validar SuperFácil Web
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'bun.lock'
+      - 'vite.config.ts'
+      - '.github/workflows/verificar-web.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Instalar dependências
+        run: bun install --frozen-lockfile
+      - name: Testes matemáticos e navegação
+        run: bun run test
+      - name: Compilar web
+        run: bun run build
+      - name: Conferir TypeScript
+        run: bunx tsc --noEmit
