@@ -1,0 +1,47 @@
+name: Publicar demonstração SuperFácil
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'demo/**'
+      - 'public/logo-superfacil.svg'
+      - 'public/banner-*.svg'
+      - '.github/workflows/pages-demo.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: superfacil-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obter arquivos
+        uses: actions/checkout@v4
+      - name: Validar demonstração
+        run: |
+          node --check demo/app.js
+          node -e "const x=require('./demo/dados.json'); if(x.concursos.length!==599) process.exit(2)"
+      - name: Separar somente os arquivos públicos
+        run: |
+          mkdir -p _site/demo _site/public
+          cp index.html _site/
+          cp demo/styles.css demo/app.js demo/dados.json demo/version.json demo/manifest.webmanifest _site/demo/
+          cp public/favicon.svg public/logo-superfacil.svg public/banner-*.svg _site/public/
+          touch _site/.nojekyll
+      - name: Preparar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Enviar site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publicar site
+        id: deployment
+        uses: actions/deploy-pages@v4
