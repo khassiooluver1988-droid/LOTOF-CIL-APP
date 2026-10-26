@@ -43,7 +43,7 @@ function Jogar() {
   const concursos = base?.modo === "ok" ? base.concursos : [];
   const ultimo = concursos[0] ?? null;
   const anterior = ultimo ? concursos.find((c) => c.numero === ultimo.numero - 1) : null;
-  const padraoSugerido = distribuicaoParidade(concursos).find(({ padrao }) => {
+  const padraoSugerido = (concursos.length === 599 ? distribuicaoParidade(concursos) : []).find(({ padrao }) => {
     const pares = Number(padrao.split("P")[0]);
     return pares >= 5 && pares <= 10;
   });
