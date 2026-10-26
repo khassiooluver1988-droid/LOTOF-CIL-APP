@@ -16,7 +16,13 @@ import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as JogarRouteImport } from './routes/jogar'
 import { Route as MaisRouteImport } from './routes/mais'
 import { Route as MeusJogosRouteImport } from './routes/meus-jogos'
+import { Route as ResultadosRouteImport } from './routes/resultados'
 
+const ResultadosRoute = ResultadosRouteImport.update({
+  id: '/resultados',
+  path: '/resultados',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/jogar': typeof JogarRoute
   '/mais': typeof MaisRoute
   '/meus-jogos': typeof MeusJogosRoute
+  '/resultados': typeof ResultadosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,7 +91,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/analise' | '/dicas' | '/entrar' | '/jogar' | '/mais' | '/meus-jogos'
+    '/' | '/analise' | '/dicas' | '/entrar' | '/jogar' | '/mais' | '/meus-jogos' | '/resultados'
   fileRoutesByTo: FileRoutesByTo
   to:
     '/' | '/analise' | '/dicas' | '/entrar' | '/jogar' | '/mais' | '/meus-jogos'
@@ -97,6 +104,7 @@ export interface FileRouteTypes {
     | '/jogar'
     | '/mais'
     | '/meus-jogos'
+    | '/resultados'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -107,6 +115,7 @@ export interface RootRouteChildren {
   JogarRoute: typeof JogarRoute
   MaisRoute: typeof MaisRoute
   MeusJogosRoute: typeof MeusJogosRoute
+  ResultadosRoute: typeof ResultadosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -160,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeusJogosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resultados': {
+      id: '/resultados'
+      path: '/resultados'
+      fullPath: '/resultados'
+      preLoaderRoute: typeof ResultadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -171,6 +187,7 @@ const rootRouteChildren: RootRouteChildren = {
   JogarRoute: JogarRoute,
   MaisRoute: MaisRoute,
   MeusJogosRoute: MeusJogosRoute,
+  ResultadosRoute: ResultadosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

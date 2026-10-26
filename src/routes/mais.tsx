@@ -39,7 +39,7 @@ function Mais() {
       <section className="card-premium mt-3 p-4 text-sm">
         <h2 className="flex items-center gap-2 font-bold"><Database className="h-4 w-4" /> Configuração da base</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5 text-muted-foreground">
-          <li>Fonte prevista: planilha <strong>Base20_Resultados_Lotofacil.xlsx</strong> (concursos 3713 a 3812, ainda não importada).</li>
+          <li>Fonte prevista: planilha <strong>Base20_Resultados_Lotofacil.xlsx</strong> (concursos 3713 a 3812, já importados).</li>
           <li>Somente resultados efetivos são aceitos; concursos faltantes nunca são preenchidos.</li>
           <li>As análises usam a janela móvel dos 599 concursos mais recentes disponíveis.</li>
           <li>Integração com resultados oficiais da CAIXA ainda não implementada.</li>

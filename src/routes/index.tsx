@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <main className="mx-auto max-w-xl px-4 pb-28 pt-10">
+    <main className="mx-auto max-w-xl px-4 pb-40 pt-10">
       <div className="flex flex-col items-center text-center">
         <Logo size="lg" />
         <h1 className="mt-8 text-3xl font-extrabold leading-tight">
