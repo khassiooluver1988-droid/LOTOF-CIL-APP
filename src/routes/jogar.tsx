@@ -61,9 +61,9 @@ function Jogar() {
   }
 
   function incluirManual() {
-    if (!validarJogo(marcadas,exclusoes)) return toast.error("Escolha exatamente 15 dezenas válidas.");
-    if (jogos.some(j => j.join(",") === marcadas.join(","))) return toast.error("Este jogo já está na lista.");
-    if (jogos.length >= qtd) return toast.error("Você atingiu a quantidade selecionada.");
+    if (!validarJogo(marcadas,exclusoes)) {toast.error("Escolha exatamente 15 dezenas válidas."); return;}
+    if (jogos.some(j => j.join(",") === marcadas.join(","))) {toast.error("Este jogo já está na lista."); return;}
+    if (jogos.length >= qtd) {toast.error("Você atingiu a quantidade selecionada."); return;}
     setJogos(x=>[...x,[...marcadas]]);
     setMarcadas([]);
     toast.success("Jogo adicionado.");
