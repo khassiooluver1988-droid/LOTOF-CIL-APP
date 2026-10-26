@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#20053c">
+<meta name="description" content="SuperFácil — estatísticas da Lotofácil, geração de jogos, conferência e análises históricas.">
+<meta name="app-version" content="2.0.1"/>
+<title>SuperFácil • Lotofácil — Aplicativo</title>
+<link rel="icon" type="image/svg+xml" href="./public/favicon.svg">
+<link rel="manifest" href="./demo/manifest.webmanifest">
+<link rel="stylesheet" href="./demo/styles.css">
+</head>
+<body>
+<div id="agegate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gtitle">
+ <div class="gate-inner"><img class="gate-logo" src="./public/logo-superfacil.svg" alt="SuperFácil">
+ <span class="age-icon">18+</span><h2 id="gtitle">Bem-vindo ao SuperFácil</h2>
+ <p>Uma ferramenta independente de análise estatística da Lotofácil. Apenas para maiores de 18 anos. Jogue com responsabilidade.</p>
+ <button id="ageyes" class="btn primary">Confirmo que tenho 18 anos ou mais</button>
+ <button id="ageno" class="btn neutral">Sou menor de 18 anos</button>
+ <small>O SuperFácil não vende ou registra apostas e não possui vínculo com a CAIXA.</small>
+ </div>
+</div>
+<header class="site-head">
+ <div class="head-inside">
+  <a href="#inicio" class="brand" aria-label="Ir para início"><img src="./public/logo-superfacil.svg" alt="SuperFácil — Lotofácil"></a>
+  <nav aria-label="Navegação principal" class="navtop"><a href="#inicio">⌂<span>Início</span></a><a href="#analise">▥<span>Análise</span></a><a href="#resultados">▤<span>Resultados</span></a></nav>
+  <button id="menuButton" class="hamburger" aria-expanded="false" aria-controls="drawer" aria-label="Abrir menu">☰</button>
+ </div>
+ <nav id="drawer" class="drawer hidden" aria-label="Menu completo"><a href="#inicio">Início</a><a href="#jogar">Gerar jogos</a><a href="#analise">Análise</a><a href="#resultados">Resultados</a><a href="#dicas">Dicas</a><a href="#salvos">Meus jogos</a><button id="checkUpdate">Verificar atualização</button></nav>
+</header>
+<div class="shell">
+ <div class="snapshot" role="status">Demonstração funcional • Base de 599 concursos, até o <b>3812</b> (23/10/2026) • Dados posteriores ainda não sincronizados</div>
+ <main id="app" aria-live="polite"></main>
+</div>
+<footer class="footer">
+ <div class="foot-grid">
+  <div><span class="micro">Desenvolvido por</span><strong>Khassio Silva</strong><span class="micro gap">Gerenciado por</span><strong class="smallstrong">Insight Marketing e Desenvolvimento</strong></div>
+  <div><strong>🎧 Suporte</strong><a class="whatsapp" href="https://wa.me/5586994465882?text=Ol%C3%A1%2C%20preciso%20de%20suporte%20sobre%20o%20SuperF%C3%A1cil" target="_blank" rel="noopener noreferrer">◉ (86) 99446-5882</a><span class="micro">Atendimento via WhatsApp</span></div>
+  <div><strong>♢ Conexão HTTPS</strong><a class="google" target="_blank" rel="noopener noreferrer" href="https://transparencyreport.google.com/safe-browsing/search?url=khassiooluver1988-droid.github.io">Google Safe Browsing ↗</a><span class="micro">Consulta externa, sem certificação Google</span></div>
+ </div>
+ <p>🔞 Proibido para menores de 18 anos. Nenhuma técnica estatística garante premiação. Ferramenta independente da CAIXA. <span id="versionTag">v2.0</span></p>
+</footer>
+<div id="updateToast" class="update-toast hidden" role="status"><b>Nova versão disponível</b><button id="reloadButton">Atualizar agora</button><button id="closeUpdate" aria-label="Dispensar">×</button></div>
+<script src="./demo/app.js" defer></script>
+</body></html>

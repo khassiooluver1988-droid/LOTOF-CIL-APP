@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'app.html'
       - 'demo/**'
       - 'public/logo-superfacil.svg'
       - 'public/banner-*.svg'
@@ -32,7 +33,7 @@ jobs:
       - name: Separar somente os arquivos públicos
         run: |
           mkdir -p _site/demo _site/public
-          cp index.html _site/
+          cp index.html app.html _site/
           cp demo/styles.css demo/app.js demo/dados.json demo/version.json demo/manifest.webmanifest _site/demo/
           cp public/favicon.svg public/logo-superfacil.svg public/banner-*.svg _site/public/
           touch _site/.nojekyll

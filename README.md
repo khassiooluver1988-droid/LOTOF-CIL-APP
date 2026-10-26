@@ -1,3 +1,11 @@
+# ACESSAR APLICATIVO SUPERFÁCIL 2.0
+
+**[ABRIR APLICATIVO SUPERFÁCIL — VERSÃO INTERATIVA](https://khassiooluver1988-droid.github.io/LOTOF-CIL-APP/app.html?versao=2.0.1)**
+
+Se o GitHub Pages mostrar este texto, clique no link acima para acessar as telas do aplicativo. Este arquivo README é apenas a documentação do código.
+
+---
+
 # SuperFácil — LOTOF-CIL-APP
 
 Aplicativo **independente** de análise descritiva dos resultados da Lotofácil. Não realiza apostas, não é serviço oficial da CAIXA e não promete maior probabilidade de acerto.
